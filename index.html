@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mengubah title menjadi lebih catchy bergaya infografis -->
+    <title>The Wealth Scale: Visualizing Historical Fortunes</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Menambahkan Boxicons untuk icon social media di footer -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="img/logo1.png">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #1E293B;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(to right, #B8860B, #D4AF37, #B8860B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+
+        .era-btn {
+            transition: all 0.3s ease;
+        }
+        .era-btn.active {
+            background-color: #1E293B;
+            color: white;
+            border-color: #1E293B;
+            box-shadow: 0 4px 14px 0 rgba(30, 41, 59, 0.39);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-200 selection:text-yellow-900">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">⚖️</span>
+                    <span class="font-bold text-xl tracking-wider serif-font text-[#1E293B]">THE WEALTH SCALE</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-semibold text-gray-600">
+                    <a href="#macro" class="hover:text-[#D4AF37] transition-colors">Macro View</a>
+                    <a href="#explorer" class="hover:text-[#D4AF37] transition-colors">Era Explorer</a>
+                    <a href="#typology" class="hover:text-[#D4AF37] transition-colors">Wealth Typology</a>
+                    <a href="#modern" class="hover:text-[#D4AF37] transition-colors">Modern Comparison</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-20 lg:py-32 px-4 sm:px-6 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-yellow-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-[#1E293B]">
+                Measuring the <span class="gold-gradient-text">Unmeasurable</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 font-light leading-relaxed">
+                From the legendary treasuries of biblical kings to the digital empires of modern innovators. An interactive analysis of extreme historical wealth, standardized to modern billions.
+            </p>
+            <div class="inline-block p-4 bg-white/80 border border-[#D4AF37]/30 rounded-xl shadow-sm text-sm text-gray-600 max-w-2xl text-left">
+                <p><strong>Note on Methodology:</strong> Assessing ancient wealth is highly speculative. Figures for rulers often represent the GDP or land value of empires they absolutely controlled, whereas modern figures represent market equity. This data is intended for illustrative comparison of scale across human history.</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+
+        <section id="macro" class="scroll-mt-24">
+            <div class="mb-8 md:flex md:items-end md:justify-between">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-bold text-[#1E293B] mb-4 border-l-4 border-[#D4AF37] pl-4 serif-font">The Macro Perspective: Millennia of Wealth</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        This scatter plot visualizes the entire dataset across time. Due to the staggering disparity between historical millionaires and trillionaire emperors, a <strong>logarithmic scale</strong> is used on the Y-axis. Notice the isolated peaks of ancient sovereigns compared to the dense clustering of wealth in the industrial and modern eras. Hover over points for details.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="glass-panel rounded-2xl p-6 relative">
+                <div class="absolute top-6 right-8 text-xs font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded">Log Scale (Y-Axis)</div>
+                <div class="chart-container w-full max-w-5xl">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="explorer" class="scroll-mt-24 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-gray-100">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-[#1E293B] mb-4 serif-font">The Era Explorer</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Filter the archives by historical epoch. The definition of wealth shifts radically depending on the era. Select a period below to view the highest estimated net worths and explore detailed records for that specific time.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 mb-12" id="era-filters">
+                <button class="era-btn active px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="All">All Eras</button>
+                <button class="era-btn px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="Ancient">Ancient & Biblical (Pre-100 CE)</button>
+                <button class="era-btn px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="First Millennium">1st Millennium (100-1000)</button>
+                <button class="era-btn px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="Medieval">Middle Ages (1000-1600)</button>
+                <button class="era-btn px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="Industrial">Industrial (1600-1900)</button>
+                <button class="era-btn px-6 py-2 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm" data-era="Modern">Modern (1900-Present)</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-3">
+                    <h3 class="text-xl font-bold text-[#1E293B] mb-2 serif-font" id="bar-chart-title">Top Figures</h3>
+                    <p class="text-sm text-gray-500 mb-6">Ranked by estimated peak net worth (Billions USD).</p>
+                    <div class="chart-container">
+                        <canvas id="eraBarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 flex flex-col h-[400px] border border-gray-200 rounded-2xl overflow-hidden bg-[#FDFBF7]">
+                    <div class="p-4 bg-[#1E293B] text-white flex justify-between items-center">
+                        <h3 class="font-bold serif-font">Historical Directory</h3>
+                        <span class="bg-white/20 px-2 py-1 rounded text-xs"><span id="record-count">0</span> Records</span>
+                    </div>
+                    <div class="overflow-y-auto flex-grow p-4 space-y-3" id="directory-container">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="typology" class="scroll-mt-24">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-[#1E293B] mb-4 border-b-2 border-[#D4AF37] inline-block pb-2 serif-font">Typology of Historical Wealth</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    How do we compare a 13th-century conqueror to a 21st-century tech CEO? We must categorize the <em>source</em> of their wealth to understand the context of these astronomical numbers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow border-t-4 border-t-[#6D28D9]">
+                    <div class="text-4xl mb-4">👑</div>
+                    <h4 class="text-lg font-bold text-[#1E293B] mb-2 serif-font">Absolute Sovereign</h4>
+                    <p class="text-sm text-gray-600 mb-4">Wealth represents the total GDP or land value of an empire. The ruler practically "owns" the state's output. Highly illiquid.</p>
+                    <div class="text-xs bg-gray-50 p-2 rounded text-gray-700 mt-auto">
+                        <strong>Examples:</strong> Genghis Khan, Augustus Caesar, Empress Wu Zetian
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow border-t-4 border-t-[#D4AF37]">
+                    <div class="text-4xl mb-4">⚖️</div>
+                    <h4 class="text-lg font-bold text-[#1E293B] mb-2 serif-font">Resource Monopolist</h4>
+                    <p class="text-sm text-gray-600 mb-4">Wealth derived from near-total control over a vital physical resource (gold, oil, salt) within a vast region.</p>
+                    <div class="text-xs bg-gray-50 p-2 rounded text-gray-700 mt-auto">
+                        <strong>Examples:</strong> Mansa Musa, John D. Rockefeller, King Solomon
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow border-t-4 border-t-[#10B981]">
+                    <div class="text-4xl mb-4">📈</div>
+                    <h4 class="text-lg font-bold text-[#1E293B] mb-2 serif-font">Equity Capitalist</h4>
+                    <p class="text-sm text-gray-600 mb-4">Modern wealth based on the public market valuation of corporate equity and scalable technological infrastructure.</p>
+                    <div class="text-xs bg-gray-50 p-2 rounded text-gray-700 mt-auto">
+                        <strong>Examples:</strong> Elon Musk, Bill Gates, Jeff Bezos
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow border-t-4 border-t-[#3B82F6]">
+                    <div class="text-4xl mb-4">📜</div>
+                    <h4 class="text-lg font-bold text-[#1E293B] mb-2 serif-font">Biblical & Dynastic</h4>
+                    <p class="text-sm text-gray-600 mb-4">Wealth estimated from ancient texts, legends, or massive generational inheritance, often measured in land or livestock.</p>
+                    <div class="text-xs bg-gray-50 p-2 rounded text-gray-700 mt-auto">
+                        <strong>Examples:</strong> Rothschild Family, Abraham, Job
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="modern" class="scroll-mt-24 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-gray-100">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-[#1E293B] mb-4 border-l-4 border-[#10B981] pl-4 serif-font">Industrialists vs. Innovators</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                        When adjusting for inflation, the titans of the 19th and early 20th centuries directly rival today's tech billionaires. John D. Rockefeller's estimated $420 Billion was built on physical oil infrastructure, whereas modern fortunes are built on digital scalability and rapid market capitalization.
+                    </p>
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 space-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-[#D4AF37] text-xl">▪</span>
+                            <p class="text-sm text-gray-700"><strong>The Gilded Age:</strong> Wealth required massive labor forces, physical extraction, and decades of infrastructural monopoly.</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-[#10B981] text-xl">▪</span>
+                            <p class="text-sm text-gray-700"><strong>The Information Age:</strong> Wealth is generated through software scalability, global user bases, and equity market speculation, accumulating much faster.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-center mb-4 text-[#1E293B]">Peak Wealth Comparison (Billions USD)</h3>
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer yang sudah dipoles -->
+    <footer class="bg-[#1E293B] text-gray-400 py-12 border-t border-[#D4AF37]/30">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="text-3xl mb-4 text-[#D4AF37]">⚖️</div>
+            
+            <p class="mb-2">Data synthesized from historical archives, religious texts, and modern financial estimates.</p>
+            <p class="opacity-75 mb-8 text-sm">Designed for analytical exploration of scale. Values are speculative conversions to modern USD.</p>
+            
+            <!-- Social Media Icons -->
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="https://www.linkedin.com/in/lutfi-faiz-ziyadatullah-a38062299" target="_blank" class="text-gray-400 hover:text-[#D4AF37] hover:scale-110 text-3xl transition-all"><i class='bx bxl-linkedin-square'></i></a>
+                <a href="https://github.com/Luficerr" target="_blank" class="text-gray-400 hover:text-[#D4AF37] hover:scale-110 text-3xl transition-all"><i class='bx bxl-github'></i></a>
+                <a href="https://www.instagram.com/lutfifaizziyadatullah" target="_blank" class="text-gray-400 hover:text-[#D4AF37] hover:scale-110 text-3xl transition-all"><i class='bx bxl-instagram'></i></a>
+            </div>
+
+            <!-- Auto Copyright -->
+            <p class="text-gray-500 text-sm mt-4 font-body border-t border-gray-700 pt-6">
+                &copy; <span id="currentYear"></span> Lutfi Faiz Ziyadatullah | All Rights Reserved
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Set tahun otomatis untuk footer
+        document.getElementById('currentYear').innerText = new Date().getFullYear();
+
+        const rawData = [
+            { name: "Genghis Khan", year: 1200, era: "Medieval", wealth: 100000, display: "100 Trillion", desc: "Estimated value of Eurasian land mass conquered." },
+            { name: "Emperor Shenzong", year: 1060, era: "Medieval", wealth: 32000, display: "32 Trillion", desc: "Controlled ~30% of global GDP during Song Dynasty." },
+            { name: "Akbar the Great", year: 1580, era: "Medieval", wealth: 27500, display: "27.5 Trillion", desc: "Mughal Emperor controlling ~25% of Global GDP." },
+            { name: "Empress Wu Zetian", year: 680, era: "First Millennium", wealth: 25000, display: "25 Trillion", desc: "Controlled ~22.7% of Global GDP during the Tang Dynasty." },
+            { name: "Amenhotep III", year: -1380, era: "Ancient", wealth: 7300, display: "7.3 Trillion", desc: "Pharaoh during a peak of Egyptian power and gold accumulation." },
+            { name: "Mansa Musa", year: 1320, era: "Medieval", wealth: 6000, display: "6 Trillion", desc: "King of Timbuktu, controlled massive gold and salt monopolies." },
+            { name: "Julius Caesar", year: -50, era: "Ancient", wealth: 5400, display: "5.4 Trillion", desc: "Wealth amassed through massive conquests, notably Gaul." },
+            { name: "Marcus Aurelius", year: 150, era: "First Millennium", wealth: 5000, display: "5 Trillion", desc: "Roman Emperor, absolute control over state treasury." },
+            { name: "Septimius Severus", year: 200, era: "First Millennium", wealth: 5000, display: "5 Trillion", desc: "Roman Emperor during a peak of imperial reach." },
+            { name: "Augustus Caesar", year: 10, era: "Ancient", wealth: 4900, display: "4.9 Trillion", desc: "Personally owned all of Egypt, huge portions of global economic output." },
+            { name: "King Solomon", year: -950, era: "Ancient", wealth: 3900, display: "3.9 Trillion", desc: "Biblical figure renowned for immense gold reserves and tribute." },
+            { name: "Nebuchadnezzar II", year: -600, era: "Ancient", wealth: 2500, display: "2.5 Trillion", desc: "King of the Neo-Babylonian Empire." },
+            { name: "Alexander the Great", year: -330, era: "Ancient", wealth: 2200, display: "2.2 Trillion", desc: "Conqueror of the Persian Empire." },
+            { name: "Catherine the Great", year: 1770, era: "Industrial", wealth: 1900, display: "1.9 Trillion", desc: "Empress of Russia, controlled vast lands and serf populations." },
+            { name: "Attila the Hun", year: 430, era: "First Millennium", wealth: 540, display: "540 Billion", desc: "Ruler of the Huns, extracted massive tribute from Rome." },
+            { name: "Jakob Fugger", year: 1500, era: "Medieval", wealth: 450, display: "450 Billion", desc: "Merchant, mining entrepreneur, and banker of Europe." },
+            { name: "John D. Rockefeller", year: 1910, era: "Modern", wealth: 420, display: "420 Billion", desc: "Standard Oil monopolist. First modern billionaire." },
+            { name: "Andrew Carnegie", year: 1900, era: "Modern", wealth: 400, display: "400 Billion", desc: "Steel magnate who sold his company to J.P. Morgan." },
+            { name: "Nathan Mayer Rothschild", year: 1820, era: "Industrial", wealth: 400, display: "400 Billion", desc: "Pioneer of international finance." },
+            { name: "Cyrus the Great", year: -550, era: "Ancient", wealth: 400, display: "400 Billion", desc: "Founder of the Achaemenid Empire." },
+            { name: "Elon Musk", year: 2024, era: "Modern", wealth: 350, display: "350 Billion", desc: "Modern peak valuation based on tech equity (Tesla, SpaceX)." },
+            { name: "Louis XIV", year: 1700, era: "Industrial", wealth: 300, display: "300 Billion", desc: "The Sun King, built Versailles, centralized wealth." },
+            { name: "David", year: -1000, era: "Ancient", wealth: 300, display: "300 Billion", desc: "Biblical King of Israel." },
+            { name: "Charlemagne", year: 800, era: "First Millennium", wealth: 250, display: "250 Billion", desc: "King of the Franks, united much of Western Europe." },
+            { name: "Jeff Bezos", year: 2024, era: "Modern", wealth: 200, display: "200 Billion", desc: "Founder of Amazon." },
+            { name: "Cornelius Vanderbilt", year: 1870, era: "Industrial", wealth: 200, display: "200 Billion", desc: "Railroad and shipping magnate." },
+            { name: "Joseph's Pharaoh", year: -1650, era: "Ancient", wealth: 200, display: "200 Billion", desc: "Biblical narrative of grain monopolization during famine." },
+            { name: "Cleopatra", year: -40, era: "Ancient", wealth: 134, display: "134 Billion", desc: "Last active ruler of the Ptolemaic Kingdom of Egypt." },
+            { name: "Bill Gates", year: 2020, era: "Modern", wealth: 108, display: "108 Billion", desc: "Co-founder of Microsoft." },
+            { name: "Uzziah", year: -750, era: "Ancient", wealth: 50, display: "50 Billion", desc: "King of Judah, noted for agricultural wealth." },
+            { name: "Abraham", year: -2000, era: "Ancient", wealth: 15, display: "15 Billion", desc: "Biblical patriarch, wealth in livestock and servants." },
+            { name: "Job", year: -1500, era: "Ancient", wealth: 8, display: "8 Billion", desc: "Biblical figure, vast herds and estates." },
+            { name: "Pontius Pilate", year: 30, era: "First Millennium", wealth: 3, display: "3 Billion", desc: "Roman governor of Judaea." },
+            { name: "Martha of Bethany", year: 30, era: "First Millennium", wealth: 0.045, display: "45 Million", desc: "Biblical figure, noted supporter of Christ." },
+            { name: "Zacchaeus", year: 30, era: "First Millennium", wealth: 0.015, display: "15 Million", desc: "Chief tax collector in Jericho." }
+        ];
+
+        let scatterChartInstance = null;
+        let barChartInstance = null;
+
+        function wrapLabels(labels) {
+            return labels.map(label => {
+                if (label.length <= 16) return label;
+                let words = label.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+                for (let i = 1; i < words.length; i++) {
+                    if (currentLine.length + words[i].length + 1 <= 16) {
+                        currentLine += ' ' + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            });
+        }
+
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) return label.join(' ');
+                    return label;
+                }
+            }
+        };
+
+        function formatYear(year) {
+            return year < 0 ? Math.abs(year) + ' BCE' : year + ' CE';
+        }
+
+        function renderTimelineChart() {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            const dataPoints = rawData.map(d => ({ x: d.year, y: d.wealth, name: d.name, displayValue: d.display }));
+
+            scatterChartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Historical Figures',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(212, 175, 55, 0.7)',
+                        borderColor: '#B8860B',
+                        borderWidth: 1,
+                        pointRadius: 6,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const raw = context.raw;
+                                    return `${raw.name} (${formatYear(raw.x)}): $${raw.displayValue}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Timeline (Year)', font: { family: 'Inter', weight: 'bold' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { callback: function(value) { return formatYear(value); } }
+                        },
+                        y: {
+                            type: 'logarithmic',
+                            title: { display: true, text: 'Est. Wealth (Billions USD)', font: { family: 'Inter', weight: 'bold' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: {
+                                callback: function(value) {
+                                    if (value === 0.01 || value === 1 || value === 100 || value === 10000 || value === 100000) return value;
+                                    return null;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderEraView(era) {
+            let filteredData = era === 'All' ? [...rawData] : rawData.filter(d => d.era === era);
+            filteredData.sort((a, b) => b.wealth - a.wealth);
+            
+            const top10Data = filteredData.slice(0, 10);
+            
+            const ctx = document.getElementById('eraBarChart').getContext('2d');
+            const labels = wrapLabels(top10Data.map(d => d.name));
+            const values = top10Data.map(d => d.wealth);
+
+            if (barChartInstance) barChartInstance.destroy();
+
+            barChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Wealth (Billions USD)',
+                        data: values,
+                        backgroundColor: '#1E293B',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: commonTooltipConfig
+                    },
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Billions (USD)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        y: { 
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter', weight: '600' } }
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('bar-chart-title').innerText = `Top 10: ${era === 'All' ? 'All Eras' : era}`;
+            document.getElementById('record-count').innerText = filteredData.length;
+            
+            const dirContainer = document.getElementById('directory-container');
+            dirContainer.innerHTML = ''; 
+
+            filteredData.forEach((person, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:border-[#D4AF37] transition-colors";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-bold text-[#1E293B] serif-font text-lg"><span class="text-gray-400 text-sm mr-2">#${index+1}</span>${person.name}</h4>
+                        <span class="text-xs font-semibold bg-gray-100 px-2 py-1 rounded text-gray-600">${formatYear(person.year)}</span>
+                    </div>
+                    <div class="text-[#D4AF37] font-bold text-sm mb-2">$${person.display}</div>
+                    <p class="text-sm text-gray-600">${person.desc}</p>
+                `;
+                dirContainer.appendChild(card);
+            });
+        }
+
+        function renderComparisonChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const labels = wrapLabels(["Rockefeller", "Carnegie", "Vanderbilt", "Elon Musk", "Jeff Bezos", "Bill Gates"]);
+            const industrialData = [420, 400, 200, null, null, null];
+            const modernData = [null, null, null, 350, 200, 108];
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Gilded Age (Inflation Adj)',
+                            data: industrialData,
+                            backgroundColor: '#D4AF37',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Modern Tech Era',
+                            data: modernData,
+                            backgroundColor: '#10B981',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: commonTooltipConfig
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, grid: { color: 'rgba(0,0,0,0.05)' } }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('era-filters').addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON') {
+                document.querySelectorAll('.era-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                renderEraView(e.target.dataset.era);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimelineChart();
+            renderEraView('All');
+            renderComparisonChart();
+        });
+
+    </script>
+</body>
+</html>
